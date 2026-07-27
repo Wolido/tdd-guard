@@ -1,0 +1,35 @@
+{
+  "name": "tdd-guard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.82.1",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "description": "A pi extension that enforces TDD discipline on the main agent — intercepts subagent coder calls and blocks them until tester has completed successfully (RED phase).",
+  "license": "MIT",
+  "author": "Wolido <270262953@qq.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wolido/tdd-guard.git"
+  },
+  "keywords": [
+    "pi",
+    "pi-extension",
+    "tdd",
+    "subagent",
+    "llm-agent",
+    "testing",
+    "discipline",
+    "gate"
+  ],
+  "homepage": "https://github.com/Wolido/tdd-guard#readme",
+  "bugs": {
+    "url": "https://github.com/Wolido/tdd-guard/issues"
+  }
+}
