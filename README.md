@@ -1,4 +1,4 @@
-# TDDGuard
+# tdd-guard
 
 > A pi extension that enforces TDD discipline on the main agent — soft reminders won't cut it.
 
@@ -9,20 +9,20 @@
 
 pi's main agent delegates work to sub-agents (`coder`, `tester`, `reviewer`, etc.). In theory, it should follow TDD: dispatch `tester` to write a failing test, *then* dispatch `coder` to make it pass. In practice, the agent often skips straight to `coder`. Soft instructions ("please follow TDD") are unreliable because the LLM can — and will — ignore them when it thinks it already knows the answer.
 
-**TDDGuard** makes the rule mechanical. It intercepts sub-agent calls at the extension level and physically blocks `coder` until `tester` has completed successfully in the current turn.
+**tdd-guard** makes the rule mechanical. It intercepts sub-agent calls at the extension level and physically blocks `coder` until `tester` has completed successfully in the current turn.
 
 ## Companion Project
 
-TDDGuard is designed to work with [subagent-isolation](https://github.com/Wolido/subagent-isolation), a pi extension that provides the sub-agent system — `tester`, `coder`, `reviewer`, and others — via a `subagent` tool. TDDGuard layers discipline on top: it intercepts `subagent` tool calls and enforces the TDD gate.
+tdd-guard is designed to work with [subagent-isolation](https://github.com/Wolido/subagent-isolation), a pi extension that provides the sub-agent system — `tester`, `coder`, `reviewer`, and others — via a `subagent` tool. tdd-guard layers discipline on top: it intercepts `subagent` tool calls and enforces the TDD gate.
 
 - **[subagent-isolation](https://github.com/Wolido/subagent-isolation)** — the sub-agent runtime. Install it first to get the `subagent` tool.
-- **TDDGuard** — the gate. Install it alongside to prevent the main agent from skipping the RED phase.
+- **tdd-guard** — the gate. Install it alongside to prevent the main agent from skipping the RED phase.
 
-The two work best together, but TDDGuard is tool-name-based: any extension that exposes a `subagent` tool with the same input schema (`agent` / `task` / `tasks` / `chain`) will be gated.
+The two work best together, but tdd-guard is tool-name-based: any extension that exposes a `subagent` tool with the same input schema (`agent` / `task` / `tasks` / `chain`) will be gated.
 
 ## How It Works
 
-TDDGuard maintains a single **RED token** that acts as a one-shot gate pass.
+tdd-guard maintains a single **RED token** that acts as a one-shot gate pass.
 
 ```
                   ┌─────────────┐
@@ -57,7 +57,7 @@ Only `coder` calls are gated. Other agents (`tester`, `reviewer`, `writer`, `pla
 Clone into the global extensions directory and pi picks it up automatically:
 
 ```bash
-git clone https://github.com/Wolido/TDDGuard.git ~/.pi/agent/extensions/tdd-guard
+git clone https://github.com/Wolido/tdd-guard.git ~/.pi/agent/extensions/tdd-guard
 cd ~/.pi/agent/extensions/tdd-guard
 npm install
 ```
@@ -67,7 +67,7 @@ No extra flags needed. Works as a subdirectory extension (`index.ts` entry point
 ### Explicit path
 
 ```bash
-git clone https://github.com/Wolido/TDDGuard.git /some/path/tdd-guard
+git clone https://github.com/Wolido/tdd-guard.git /some/path/tdd-guard
 cd /some/path/tdd-guard
 npm install
 pi -e /some/path/tdd-guard
@@ -77,7 +77,7 @@ Useful for development or per-project setups.
 
 ### ⚠️ `--no-extensions`
 
-The `--no-extensions` flag disables *all* extensions, including TDDGuard. If you rely on it for discipline, don't combine the two. (Personal lesson: spent 20 minutes wondering why the gate stopped working before remembering this flag was on.)
+The `--no-extensions` flag disables *all* extensions, including tdd-guard. If you rely on it for discipline, don't combine the two. (Personal lesson: spent 20 minutes wondering why the gate stopped working before remembering this flag was on.)
 
 ## Usage / Behavior
 
@@ -97,7 +97,7 @@ Use sparingly. The extension trusts you (and the agent) to include a reason.
 
 ### Batch modes
 
-TDDGuard handles all three sub-agent dispatch modes:
+tdd-guard handles all three sub-agent dispatch modes:
 
 | Mode | Syntax | Check |
 |------|--------|-------|
@@ -121,12 +121,12 @@ When blocked, the LLM receives a message like:
 
 ### Notifications
 
-TDDGuard uses non-blocking notifications only. No popups, no confirm dialogs — it won't interrupt your flow. You'll see a brief status line when calls are blocked or allowed.
+tdd-guard uses non-blocking notifications only. No popups, no confirm dialogs — it won't interrupt your flow. You'll see a brief status line when calls are blocked or allowed.
 
 ## Development
 
 ```bash
-git clone https://github.com/Wolido/TDDGuard.git
+git clone https://github.com/Wolido/tdd-guard.git
 cd tdd-guard
 npm install
 npm test
