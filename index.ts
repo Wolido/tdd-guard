@@ -23,7 +23,7 @@ export default function (pi: Pick<ExtensionAPI, "on">) {
     pendingCalls.clear();
   });
 
-  pi.on("tool_call", async (event, ctx) => {
+  pi.on("tool_call", async (event) => {
     if (!isToolCallEventType<"subagent", SubagentInput>("subagent", event)) return;
     const { agent, task, tasks, chain } = event.input;
 
@@ -32,7 +32,6 @@ export default function (pi: Pick<ExtensionAPI, "on">) {
     const hasTasks = (tasks?.length ?? 0) > 0;
     const hasChain = (chain?.length ?? 0) > 0;
     if (Number(hasSingle) + Number(hasTasks) + Number(hasChain) !== 1) {
-      ctx.ui.notify("TDD Guard：已拦截 subagent 调用（参数组合无效）", "warning");
       return { block: true, reason: INVALID_MODE_REASON };
     }
 
@@ -41,12 +40,10 @@ export default function (pi: Pick<ExtensionAPI, "on">) {
       ? gate.onSubagentBatchStart({ tasks, chain })
       : gate.onSubagentStart({ agent, task });
     if (decision.action === "block") {
-      ctx.ui.notify("TDD Guard：已拦截 coder 调用（缺少 RED 阶段）", "warning");
       return { block: true, reason: decision.reason };
     }
     const subtasks: SubagentCall[] = isBatch ? [...(tasks ?? []), ...(chain ?? [])] : [{ agent, task }];
     pendingCalls.set(event.toolCallId, subtasks.some((s) => s.agent === "tester"));
-    ctx.ui.notify(isBatch ? "TDD Guard：放行批量调用" : `TDD Guard：放行 ${agent ?? "subagent"}`, "info");
   });
 
   pi.on("tool_execution_end", async (event) => {
